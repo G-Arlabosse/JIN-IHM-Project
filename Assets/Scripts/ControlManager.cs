@@ -7,40 +7,27 @@ using UnityEngine.Timeline;
 
 public class ControlManager : MonoBehaviour
 {
-    
-  private float s_max = 5;
-  private float direction = 0;
-  private Vector2 speed;
-  private Vector2 jump_force = new Vector2(0, 1024);
-
-  private Rigidbody2D rigidBody;
+  private MovementManager movementManager;
 
   private void Start()
   {
-    rigidBody = GetComponent<Rigidbody2D>();
+    movementManager = GetComponent<MovementManager>();
   }
 
   private void OnMove(InputValue value)
   {
     if (value.Get() == null) 
     {
-      direction = 0;
+      movementManager.direction = 0;
       return;
     }
-
-    Vector2 horizontalSpeed = (Vector2) value.Get();
-
-    direction = Mathf.Sign(horizontalSpeed.x);
+    movementManager.direction = Mathf.Sign(((Vector2) value.Get()).x);
   }
 
   private void OnJump()
   {
-    rigidBody.AddForce(jump_force);
+    movementManager.jump();
   }
 
-  private void FixedUpdate()
-  {
-    speed.x = Mathf.Lerp(speed.x, direction * s_max, 0.5f);
-    transform.Translate(speed * Time.deltaTime);
-  }
+  
 }

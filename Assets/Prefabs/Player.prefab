@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 4136139555524607848}
   - component: {fileID: 2351889660153939258}
   - component: {fileID: 3031345603241462310}
+  - component: {fileID: 3836425383255096028}
+  - component: {fileID: 2047099259335596381}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -210,3 +212,31 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &3836425383255096028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348784087190159887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edb5c14011c7f34449cac7c22103764c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MouvementManager
+  s_max: 5
+  direction: 0
+  speed: {x: 0, y: 0}
+  jump_force: {x: 0, y: 1024}
+--- !u!114 &2047099259335596381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348784087190159887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd01c2200720654ab20010a96fd2423, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DodgeManager
