@@ -8,10 +8,12 @@ using UnityEngine.Timeline;
 public class ControlManager : MonoBehaviour
 {
   private MovementManager movementManager;
+  private DodgeManager dodgeManager;
 
   private void Start()
   {
     movementManager = GetComponent<MovementManager>();
+    dodgeManager = GetComponent<DodgeManager>();
   }
 
   private void OnMove(InputValue value)
@@ -26,8 +28,35 @@ public class ControlManager : MonoBehaviour
 
   private void OnJump()
   {
-    movementManager.jump();
+    movementManager.Jump();
   }
 
-  
+  private void OnDodge()
+  {
+    dodgeManager.Dodge();
+  }
+
+  private void OnSprint(InputValue value)
+  {
+    print(value.Get());
+    
+    if (value.Get() == null)
+    {
+      movementManager.s_max = 5;
+      return;
+    }
+
+    float buttonPress = (float) value.Get();
+
+    if (buttonPress > 0.8)
+    {
+      movementManager.s_max = 8;
+    }
+
+    else if (buttonPress < 0.4)
+    {
+      movementManager.s_max = 5;
+    }
+
+  }
 }

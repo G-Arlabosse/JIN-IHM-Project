@@ -15,7 +15,7 @@ public class MovementManager : MonoBehaviour
   }
 
 
-  public void jump()
+  public void Jump()
   {
     rigidBody.AddForce(jump_force);
   }
