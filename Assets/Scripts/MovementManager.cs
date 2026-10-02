@@ -5,12 +5,12 @@ public class MovementManager : MonoBehaviour
   private Rigidbody2D rigidBody;
 
   public Vector2 velocity;
-  public float direction = 0;
+  public Vector2 direction = Vector2.zero;
   private float walkSpeed = 4;
   public bool running = false;
   private float runSpeed = 6;
 
-  public Vector2 jump_force = new Vector2(0, 1024);
+  public Vector2 jumpForce = new Vector2(0, 1024);
 
   private void Start()
   {
@@ -20,7 +20,12 @@ public class MovementManager : MonoBehaviour
 
   public void Jump()
   {
-    rigidBody.AddForce(jump_force);
+    ApplyForce(jumpForce);
+  }
+
+  public void ApplyForce(Vector2 force)
+  {
+    rigidBody.AddForce(force);
   }
 
   public void Stop()
@@ -31,9 +36,9 @@ public class MovementManager : MonoBehaviour
   private void FixedUpdate()
   {
     if (running)
-      velocity.x = Mathf.Lerp(velocity.x, direction * runSpeed, 0.5f);
+      velocity.x = Mathf.Lerp(velocity.x, direction.x * runSpeed, 0.5f);
     else
-      velocity.x = Mathf.Lerp(velocity.x, direction * walkSpeed, 0.5f);
+      velocity.x = Mathf.Lerp(velocity.x, direction.x * walkSpeed, 0.5f);
     
     transform.Translate(velocity * Time.deltaTime);
   }
