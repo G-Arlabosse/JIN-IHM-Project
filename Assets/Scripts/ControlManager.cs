@@ -26,7 +26,7 @@ public class ControlManager : MonoBehaviour
 
   private void OnJump()
   {
-    movementManager.jump();
+    movementManager.TryJump();
   }
 
   
