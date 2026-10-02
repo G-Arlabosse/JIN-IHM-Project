@@ -5,6 +5,8 @@ public class MovementManager : MonoBehaviour
   private Rigidbody2D rigidBody;
 
   public float s_max = 5;
+  public bool running = false;
+  
   public float direction = 0;
   public Vector2 speed;
   public Vector2 jump_force = new Vector2(0, 1024);
