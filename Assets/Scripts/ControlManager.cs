@@ -37,9 +37,7 @@ public class ControlManager : MonoBehaviour
   }
 
   private void OnSprint(InputValue value)
-  {
-    print(value.Get());
-    
+  {    
     if (value.Get() == null)
     {
       movementManager.s_max = 5;
