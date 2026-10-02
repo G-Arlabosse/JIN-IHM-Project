@@ -6,8 +6,11 @@ public class MovementManager : MonoBehaviour
     [SerializeField] private RaycastManager raycastManager;
 
     public float s_max = 5;
+    public Vector2 velocity;
     public float direction = 0;
-    public Vector2 speed;
+    private float walkSpeed = 4;
+    public bool running = false;
+    private float runSpeed = 6;
     public Vector2 jump_force = new Vector2(0, 1024);
     public Vector2 walljump_force = new Vector2(512, 0);
 
@@ -42,9 +45,18 @@ public class MovementManager : MonoBehaviour
         rigidBody.AddForce(jump_force + walljump_force * direction);
     }
 
+    public void Stop()
+    {
+        velocity = Vector2.zero;
+    }
+
     private void FixedUpdate()
     {
-        speed.x = Mathf.Lerp(speed.x, direction * s_max, 0.5f);
-        transform.Translate(speed * Time.deltaTime);
+        if (running)
+          velocity.x = Mathf.Lerp(velocity.x, direction * runSpeed, 0.5f);
+        else
+          velocity.x = Mathf.Lerp(velocity.x, direction * walkSpeed, 0.5f);
+        
+        transform.Translate(velocity * Time.deltaTime);
     }
 }
