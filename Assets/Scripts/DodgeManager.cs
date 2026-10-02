@@ -12,6 +12,6 @@ public class DodgeManager : MonoBehaviour
 
   public void Dodge()
   {
-    movementManager.speed = Vector2.zero;
+    movementManager.Stop();
   }
 }

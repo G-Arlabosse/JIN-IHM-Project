@@ -40,7 +40,7 @@ public class ControlManager : MonoBehaviour
   {    
     if (value.Get() == null)
     {
-      movementManager.s_max = 5;
+      movementManager.running = false;
       return;
     }
 
@@ -48,12 +48,12 @@ public class ControlManager : MonoBehaviour
 
     if (buttonPress > 0.8)
     {
-      movementManager.s_max = 8;
+      movementManager.running = false;
     }
 
     else if (buttonPress < 0.4)
     {
-      movementManager.s_max = 5;
+      movementManager.running = false;
     }
 
   }
