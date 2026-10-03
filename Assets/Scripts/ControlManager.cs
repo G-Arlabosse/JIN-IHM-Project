@@ -43,7 +43,7 @@ public class ControlManager : MonoBehaviour
 
   private void OnJump()
   {
-    movementManager.Jump();
+    movementManager.TryJump();
   }
 
   private void OnDodge()
