@@ -1601,6 +1601,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3836425383255096028, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
+      propertyPath: coyoteTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836425383255096028, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
+      propertyPath: runForce.x
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836425383255096028, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
+      propertyPath: walkForce.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836425383255096028, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
+      propertyPath: inputBufferTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5738790725547320507, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
