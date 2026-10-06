@@ -14,12 +14,12 @@ public class DodgeManager : MonoBehaviour
 
   public void Dodge()
   {
-    Vector2 direction = movementManager.direction;
+    Vector2 direction = movementManager.getDirection();
 
     if (movementManager.running && direction != Vector2.zero)
       Dash(direction);
     else 
-      movementManager.velocity = Vector2.zero;
+      movementManager.Stop();
   }
 
   public void Dash(Vector2 direction)

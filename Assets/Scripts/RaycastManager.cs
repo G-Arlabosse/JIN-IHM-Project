@@ -15,11 +15,7 @@ public class RaycastManager : MonoBehaviour
     {
         colliderWidth = _collider.size.x;
         colliderHeight = _collider.size.y;
-        
-        Debug.Log((Vector2)transform.position);
-        Debug.Log(leftCastOrigin);
-        Debug.Log(rightCastOrigin);
-        Debug.Log(bottomCastOrigin);
+
     }
 
     private void UpdateOrigins()

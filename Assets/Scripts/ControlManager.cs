@@ -23,21 +23,21 @@ public class ControlManager : MonoBehaviour
   {
     if (value.Get() == null) 
     {
-      movementManager.direction = Vector2.zero;
+      movementManager.Stop();
       return;
     }
 
     Vector2 directionNT = ((Vector2) value.Get()).normalized;
 
     if (Mathf.Abs(directionNT.x) > sensitivityJoyStick)
-    { movementManager.direction.x = Mathf.Sign(directionNT.x); }
+    { movementManager.ApplyVelocityX(1); }
     else
-    { movementManager.direction.x = 0; }
+    { movementManager.ApplyVelocityX(0); }
       
     if (Mathf.Abs(directionNT.y) > sensitivityJoyStick)
-    { movementManager.direction.y = Mathf.Sign(directionNT.y); }
+    { movementManager.ApplyVelocityY(1); }
     else
-    { movementManager.direction.y = 0; }
+    { movementManager.ApplyVelocityY(0); }
       
   }
 

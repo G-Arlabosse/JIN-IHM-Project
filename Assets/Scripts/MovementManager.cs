@@ -5,8 +5,6 @@ public class MovementManager : MonoBehaviour
     private Rigidbody2D rigidBody;
     [SerializeField] private RaycastManager raycastManager;
 
-    public Vector2 velocity;
-    public Vector2 direction = Vector2.zero;
     private float walkSpeed = 4;
     public bool running = false;
     private float runSpeed = 6;
@@ -34,7 +32,6 @@ public class MovementManager : MonoBehaviour
         // Update coyote time counter
         if (raycastManager.CastDown())
         {
-            Debug.Log("Grounded");
             coyoteTimeCounter = coyoteTime;
             if (inputBufferCounter > 0 && rigidBody.linearVelocityY <= 0)
             {
@@ -79,7 +76,7 @@ public class MovementManager : MonoBehaviour
 
     public void Stop()
     {
-        velocity = Vector2.zero;
+        rigidBody.linearVelocity = Vector2.zero;
     }
 
     public void ApplyForce(Vector2 force)
@@ -87,13 +84,33 @@ public class MovementManager : MonoBehaviour
         rigidBody.AddForce(force);
     }
 
-    private void FixedUpdate()
+    public void ApplyVelocity(Vector2 Velocity)
     {
-        if (running)
-          velocity.x = Mathf.Lerp(velocity.x, direction.x * runSpeed * Time.deltaTime, 0.5f);
-        else
-          velocity.x = Mathf.Lerp(velocity.x, direction.x * walkSpeed * Time.deltaTime, 0.5f);
-        
-        transform.Translate(velocity);
+        rigidBody.linearVelocity = Velocity;
+    }
+
+    public void ApplyVelocity(float x, float y) { ApplyVelocity(new Vector2(x, y)); }
+
+    public void ApplyVelocityX(float x)
+    {
+        ApplyVelocity(x, rigidBody.linearVelocity.y);
+    }
+
+    public void ApplyVelocityY(float y)
+    {
+        ApplyVelocity(rigidBody.linearVelocity.x, y);
+    }
+
+    public Vector2 getDirection()
+    {
+        Vector2 direction = new Vector2(rigidBody.linearVelocity.x, rigidBody.linearVelocity.y);
+
+        if (direction.x != 0)
+            direction.x = Mathf.Sign(direction.x);
+
+        if (direction.y != 0)
+            direction.y = Mathf.Sign(direction.y);
+
+        return direction;
     }
 }
