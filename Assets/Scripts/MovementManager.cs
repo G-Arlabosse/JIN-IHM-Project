@@ -134,6 +134,7 @@ public class MovementManager : MonoBehaviour
             currentSpeed = runSpeed;
         else
             currentSpeed = walkSpeed;
+    }
     private void ChangeDirection(Vector2 direction)
     {
         directionEffective = direction;
