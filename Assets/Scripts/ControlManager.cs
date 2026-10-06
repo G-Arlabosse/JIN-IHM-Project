@@ -11,7 +11,7 @@ public class ControlManager : MonoBehaviour
   private MovementManager movementManager;
   private DodgeManager dodgeManager;
 
-  private float sensitivityJoyStick = 0.4f;
+  
 
   private void Start()
   {
@@ -21,24 +21,23 @@ public class ControlManager : MonoBehaviour
 
   private void OnMove(InputValue value)
   {
+
     if (value.Get() == null) 
     {
-      movementManager.Stop();
+      timeSinceLastMove = 0;
+      movementManager.directionPlayer = Vector2.zero;
+      movementManager.TryStop();
       return;
     }
 
-    Vector2 directionNT = ((Vector2) value.Get()).normalized;
-
-    if (Mathf.Abs(directionNT.x) > sensitivityJoyStick)
-    { movementManager.ApplyVelocityX(1); }
-    else
-    { movementManager.ApplyVelocityX(0); }
-      
-    if (Mathf.Abs(directionNT.y) > sensitivityJoyStick)
-    { movementManager.ApplyVelocityY(1); }
-    else
-    { movementManager.ApplyVelocityY(0); }
-      
+    Vector2 direction = ((Vector2) value.Get()).normalized;
+    if (timeSinceLastMove < 0.05)
+    {
+      return;
+    }
+    
+    movementManager.TryChangeDirection(direction);
+    timeSinceLastMove = 0;
   }
 
   private void OnJump()
@@ -72,4 +71,10 @@ public class ControlManager : MonoBehaviour
     }
 
   }
+
+private float timeSinceLastMove = 0;
+ private void Update()
+ {
+  timeSinceLastMove += Time.deltaTime;
+ }
 }

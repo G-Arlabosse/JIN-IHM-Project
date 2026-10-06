@@ -14,7 +14,7 @@ public class DodgeManager : MonoBehaviour
 
   public void Dodge()
   {
-    Vector2 direction = movementManager.getDirection();
+    Vector2 direction = movementManager.directionPlayer;
 
     if (movementManager.running && direction != Vector2.zero)
       Dash(direction);

@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MovementManager : MonoBehaviour
@@ -16,6 +18,8 @@ public class MovementManager : MonoBehaviour
     private float coyoteTimeCounter;
     private float inputBufferCounter;
 
+    public Vector2 directionEffective = Vector2.zero;
+    public Vector2 directionPlayer = Vector2.zero;
 
 
     private void Start()
@@ -32,6 +36,8 @@ public class MovementManager : MonoBehaviour
         // Update coyote time counter
         if (raycastManager.CastDown())
         {
+            directionEffective.x = directionPlayer.x;
+
             coyoteTimeCounter = coyoteTime;
             if (inputBufferCounter > 0 && rigidBody.linearVelocityY <= 0)
             {
@@ -43,6 +49,22 @@ public class MovementManager : MonoBehaviour
         {
             coyoteTimeCounter -= Time.deltaTime;
         }
+
+        if (running)
+            rigidBody.linearVelocityX = Mathf.Lerp(rigidBody.linearVelocityX, directionEffective.x * runSpeed, 0.5f);
+        else
+            rigidBody.linearVelocityX = Mathf.Lerp(rigidBody.linearVelocityX, directionEffective.x * walkSpeed, 0.5f);
+    }
+
+    public void ApplyForce(Vector2 force)
+    {
+        rigidBody.AddForce(force);
+    }
+
+    private void Jump()
+    {
+        rigidBody.linearVelocityY = 0;
+        rigidBody.AddForce(jump_force);
     }
 
     public void TryJump()
@@ -61,56 +83,58 @@ public class MovementManager : MonoBehaviour
 
     }
 
-    private void Jump()
-    {
-        rigidBody.linearVelocityY = 0;
-        rigidBody.AddForce(jump_force);
-    }
-
     private void WallJump(float direction)
     {
         // Set the velocity to zero before applying the wall jump force
         rigidBody.linearVelocityY = 0;
         rigidBody.AddForce(jump_force + walljump_force * direction);
+
+        if (raycastManager.CastLeft())
+            directionEffective.x = 1;
+        else
+            directionEffective.x = -1;
+    }
+
+    public void StopX()
+    {
+        directionEffective.x = 0;
     }
 
     public void Stop()
     {
-        rigidBody.linearVelocity = Vector2.zero;
+        
+        directionEffective = Vector2.zero;
     }
-
-    public void ApplyForce(Vector2 force)
+    public void TryStop()
     {
-        rigidBody.AddForce(force);
+        if (raycastManager.CastDown())
+            Stop();
     }
 
-    public void ApplyVelocity(Vector2 Velocity)
+
+    [SerializeField] private float sensitivityJoyStick = 0.4f;
+    public void TryChangeDirection(Vector2 direction)
     {
-        rigidBody.linearVelocity = Velocity;
+        if (Mathf.Abs(direction.x) > sensitivityJoyStick)
+    { 
+        directionPlayer.x = Mathf.Sign(direction.x); 
+
+        if (!raycastManager.CastLeft() && !raycastManager.CastRight())
+            directionEffective.x = Mathf.Sign(direction.x); 
+    }
+    else
+    { directionPlayer.x = 0; }
+      
+    if (Mathf.Abs(direction.y) > sensitivityJoyStick)
+    { directionPlayer.y = Mathf.Sign(direction.y); }
+    else
+    { directionPlayer.y = 0; }
     }
 
-    public void ApplyVelocity(float x, float y) { ApplyVelocity(new Vector2(x, y)); }
-
-    public void ApplyVelocityX(float x)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        ApplyVelocity(x, rigidBody.linearVelocity.y);
+    if (raycastManager.CastLeft() || raycastManager.CastRight())
+        directionEffective = Vector2.zero;
     }
 
-    public void ApplyVelocityY(float y)
-    {
-        ApplyVelocity(rigidBody.linearVelocity.x, y);
-    }
-
-    public Vector2 getDirection()
-    {
-        Vector2 direction = new Vector2(rigidBody.linearVelocity.x, rigidBody.linearVelocity.y);
-
-        if (direction.x != 0)
-            direction.x = Mathf.Sign(direction.x);
-
-        if (direction.y != 0)
-            direction.y = Mathf.Sign(direction.y);
-
-        return direction;
-    }
 }
