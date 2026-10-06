@@ -1615,7 +1615,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3836425383255096028, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
       propertyPath: inputBufferTime
-      value: 1
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5738790725547320507, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
       propertyPath: m_LocalPosition.x
