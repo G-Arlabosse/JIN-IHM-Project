@@ -15,7 +15,6 @@ public class RaycastManager : MonoBehaviour
     {
         colliderWidth = _collider.size.x;
         colliderHeight = _collider.size.y;
-
     }
 
     private void UpdateOrigins()
