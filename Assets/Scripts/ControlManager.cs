@@ -31,10 +31,6 @@ public class ControlManager : MonoBehaviour
     }
 
     Vector2 direction = ((Vector2) value.Get()).normalized;
-    if (timeSinceLastMove < 0.05)
-    {
-      return;
-    }
     
     movementManager.TryChangeDirection(direction);
     timeSinceLastMove = 0;

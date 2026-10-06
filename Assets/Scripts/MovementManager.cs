@@ -21,11 +21,14 @@ public class MovementManager : MonoBehaviour
     public Vector2 directionEffective = Vector2.zero;
     public Vector2 directionPlayer = Vector2.zero;
 
+    private Vector2 previousDirection = Vector2.zero;
+    private float timeSinceDirectionChange = 0f;
+
 
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
-        rigidBody.linearDamping = 0.2f;
+        //rigidBody.linearDamping = 0.2f;
         coyoteTimeCounter = 0;
         inputBufferCounter = 0;
     }
@@ -36,7 +39,7 @@ public class MovementManager : MonoBehaviour
         // Update coyote time counter
         if (raycastManager.CastDown())
         {
-            directionEffective.x = directionPlayer.x;
+            ChangeDirectionX(directionPlayer.x);
 
             coyoteTimeCounter = coyoteTime;
             if (inputBufferCounter > 0 && rigidBody.linearVelocityY <= 0)
@@ -50,10 +53,12 @@ public class MovementManager : MonoBehaviour
             coyoteTimeCounter -= Time.deltaTime;
         }
 
+        timeSinceDirectionChange += 5*Time.deltaTime;
+
         if (running)
-            rigidBody.linearVelocityX = Mathf.Lerp(rigidBody.linearVelocityX, directionEffective.x * runSpeed, 0.5f);
+            rigidBody.linearVelocityX = Mathf.Lerp(previousDirection.x, directionEffective.x * runSpeed, timeSinceDirectionChange);
         else
-            rigidBody.linearVelocityX = Mathf.Lerp(rigidBody.linearVelocityX, directionEffective.x * walkSpeed, 0.5f);
+            rigidBody.linearVelocityX = Mathf.Lerp(previousDirection.x, directionEffective.x * walkSpeed, timeSinceDirectionChange);
     }
 
     public void ApplyForce(Vector2 force)
@@ -90,25 +95,37 @@ public class MovementManager : MonoBehaviour
         rigidBody.AddForce(jump_force + walljump_force * direction);
 
         if (raycastManager.CastLeft())
-            directionEffective.x = 1;
+            ChangeDirectionX(1);
         else
-            directionEffective.x = -1;
+            ChangeDirectionX(-1);
     }
 
     public void StopX()
     {
-        directionEffective.x = 0;
+        ChangeDirectionX(0);
     }
 
     public void Stop()
     {
-        
-        directionEffective = Vector2.zero;
+
+        ChangeDirection(Vector2.zero);
     }
+
     public void TryStop()
     {
         if (raycastManager.CastDown())
             Stop();
+    }
+
+    private void ChangeDirection(Vector2 direction)
+    {
+        directionEffective = direction;
+        previousDirection = rigidBody.linearVelocity;
+        timeSinceDirectionChange = 0f;
+    }
+    private void ChangeDirectionX(float directionX)
+    {
+        ChangeDirection(new Vector2(directionX, directionEffective.y));
     }
 
 
@@ -116,25 +133,25 @@ public class MovementManager : MonoBehaviour
     public void TryChangeDirection(Vector2 direction)
     {
         if (Mathf.Abs(direction.x) > sensitivityJoyStick)
-    { 
-        directionPlayer.x = Mathf.Sign(direction.x); 
+        { 
+            directionPlayer.x = Mathf.Sign(direction.x); 
 
-        if (!raycastManager.CastLeft() && !raycastManager.CastRight())
-            directionEffective.x = Mathf.Sign(direction.x); 
-    }
-    else
-    { directionPlayer.x = 0; }
+            if (!raycastManager.CastLeft() && !raycastManager.CastRight())
+                ChangeDirectionX(Mathf.Sign(direction.x)); 
+        }
+        else { directionPlayer.x = 0; }
       
-    if (Mathf.Abs(direction.y) > sensitivityJoyStick)
-    { directionPlayer.y = Mathf.Sign(direction.y); }
-    else
-    { directionPlayer.y = 0; }
+        if (Mathf.Abs(direction.y) > sensitivityJoyStick)
+            { directionPlayer.y = Mathf.Sign(direction.y); }
+        else
+            { directionPlayer.y = 0; }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-    if (raycastManager.CastLeft() || raycastManager.CastRight())
-        directionEffective = Vector2.zero;
+        print("CollisionEnter");
+        if (raycastManager.CastLeft() || raycastManager.CastRight())
+            ChangeDirection(Vector2.zero);
     }
 
 }
