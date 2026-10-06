@@ -6,7 +6,7 @@ public class MovementManager : MonoBehaviour
     [SerializeField] private RaycastManager raycastManager;
 
     public Vector2 velocity;
-    public float direction = 0;
+    public Vector2 direction = Vector2.zero;
     private float walkSpeed = 4;
     public bool running = false;
     private float runSpeed = 6;
@@ -82,13 +82,18 @@ public class MovementManager : MonoBehaviour
         velocity = Vector2.zero;
     }
 
+    public void ApplyForce(Vector2 force)
+    {
+        rigidBody.AddForce(force);
+    }
+
     private void FixedUpdate()
     {
         if (running)
-          velocity.x = Mathf.Lerp(velocity.x, direction * runSpeed, 0.5f);
+          velocity.x = Mathf.Lerp(velocity.x, direction.x * runSpeed * Time.deltaTime, 0.5f);
         else
-          velocity.x = Mathf.Lerp(velocity.x, direction * walkSpeed, 0.5f);
+          velocity.x = Mathf.Lerp(velocity.x, direction.x * walkSpeed * Time.deltaTime, 0.5f);
         
-        transform.Translate(velocity * Time.deltaTime);
+        transform.Translate(velocity);
     }
 }
