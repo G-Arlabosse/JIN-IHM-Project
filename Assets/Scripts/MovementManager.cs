@@ -58,9 +58,9 @@ public class MovementManager : MonoBehaviour
         bool hitRight = raycastManager.CastRight();
         if (coyoteTimeCounter > 0 && rigidBody.linearVelocityY <= 0)
             Jump();
-        if (hitLeft)
+        else if (hitLeft)
             WallJump(1f);
-        if (hitRight)
+        else if (hitRight)
             WallJump(-1f);
 
     }
