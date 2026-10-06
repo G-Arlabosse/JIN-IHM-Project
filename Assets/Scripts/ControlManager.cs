@@ -54,7 +54,7 @@ public class ControlManager : MonoBehaviour
   {    
     if (value.Get() == null)
     {
-      movementManager.running = false;
+      movementManager.setSprint(false);
       return;
     }
 
@@ -62,12 +62,12 @@ public class ControlManager : MonoBehaviour
 
     if (buttonPress > 0.8)
     {
-      movementManager.running = true;
+      movementManager.setSprint(true);
     }
 
     else if (buttonPress < 0.4)
     {
-      movementManager.running = false;
+      movementManager.setSprint(false);
     }
 
   }

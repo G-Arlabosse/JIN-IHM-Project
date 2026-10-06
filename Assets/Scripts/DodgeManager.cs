@@ -24,6 +24,8 @@ public class DodgeManager : MonoBehaviour
 
   public void Dash(Vector2 direction)
   {
+    movementManager.Stop();
+    movementManager.directionEffective.x = direction.x;
     movementManager.ApplyForce(direction.normalized * dashForce);
   }
 }

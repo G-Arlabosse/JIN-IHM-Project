@@ -10,6 +10,9 @@ public class MovementManager : MonoBehaviour
     private float walkSpeed = 4;
     public bool running = false;
     private float runSpeed = 6;
+    private float currentSpeed = 4;
+
+
     public Vector2 jump_force = new Vector2(0, 1024);
     public Vector2 walljump_force = new Vector2(512, 0);
 
@@ -33,9 +36,16 @@ public class MovementManager : MonoBehaviour
     private void Update()
     {
         inputBufferCounter -= Time.deltaTime;
+
         // Update coyote time counter
         if (raycastManager.CastDown())
         {
+
+            if (currentSpeed != runSpeed && running)
+            {
+                currentSpeed = runSpeed;
+            }
+
             directionEffective.x = directionPlayer.x;
 
             coyoteTimeCounter = coyoteTime;
@@ -50,10 +60,8 @@ public class MovementManager : MonoBehaviour
             coyoteTimeCounter -= Time.deltaTime;
         }
 
-        if (running)
-            rigidBody.linearVelocityX = Mathf.Lerp(rigidBody.linearVelocityX, directionEffective.x * runSpeed, 0.5f);
-        else
-            rigidBody.linearVelocityX = Mathf.Lerp(rigidBody.linearVelocityX, directionEffective.x * walkSpeed, 0.5f);
+
+        rigidBody.linearVelocityX = Mathf.Lerp(rigidBody.linearVelocityX, directionEffective.x * currentSpeed, 0.5f);
     }
 
     public void ApplyForce(Vector2 force)
@@ -111,6 +119,15 @@ public class MovementManager : MonoBehaviour
             Stop();
     }
 
+    public void setSprint(bool value)
+    {
+        running = value;
+        if (value && raycastManager.CastDown())
+            currentSpeed = runSpeed;
+        else
+            currentSpeed = walkSpeed;
+    }
+
 
     [SerializeField] private float sensitivityJoyStick = 0.4f;
     public void TryChangeDirection(Vector2 direction)
@@ -120,7 +137,10 @@ public class MovementManager : MonoBehaviour
         directionPlayer.x = Mathf.Sign(direction.x); 
 
         if (!raycastManager.CastLeft() && !raycastManager.CastRight())
+        {
             directionEffective.x = Mathf.Sign(direction.x); 
+        }
+            
     }
     else
     { directionPlayer.x = 0; }
@@ -133,8 +153,10 @@ public class MovementManager : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        print(raycastManager.CastDown());
     if (raycastManager.CastLeft() || raycastManager.CastRight())
         directionEffective = Vector2.zero;
+        
     }
 
 }

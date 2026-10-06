@@ -19,8 +19,8 @@ public class RaycastManager : MonoBehaviour
 
     private void UpdateOrigins()
     {
-        leftCastOrigin = (Vector2)transform.position - Vector2.right * colliderWidth / 2 + Vector2.up * colliderHeight / 2;
-        rightCastOrigin = (Vector2)transform.position + Vector2.right * colliderWidth / 2 + Vector2.up * colliderHeight / 2;
+        leftCastOrigin = (Vector2)transform.position - Vector2.right * colliderWidth / 2;
+        rightCastOrigin = (Vector2)transform.position + Vector2.right * colliderWidth / 2;
         bottomCastOrigin = (Vector2)transform.position - Vector2.up * colliderHeight / 2;
     }
 
