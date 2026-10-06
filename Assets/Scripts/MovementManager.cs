@@ -106,7 +106,7 @@ public class MovementManager : MonoBehaviour
     {
         // Set the velocity to zero before applying the wall jump force
         rigidBody.linearVelocityY = 0;
-        rigidBody.AddForce(new Vector2(walljump_force, jump_force) * direction);
+        rigidBody.AddForce(new Vector2(walljump_force* direction, jump_force));
 
         if (raycastManager.CastLeft())
             ChangeDirectionX(1);

@@ -5,7 +5,7 @@ public class DodgeManager : MonoBehaviour
 
   private MovementManager movementManager;
 
-  private float dashForce = 512;
+  [SerializeField] private float dashForce = 512;
 
   private void Start()
   {
