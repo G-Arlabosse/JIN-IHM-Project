@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Timeline;
@@ -10,6 +11,8 @@ public class ControlManager : MonoBehaviour
   private MovementManager movementManager;
   private DodgeManager dodgeManager;
 
+  
+
   private void Start()
   {
     movementManager = GetComponent<MovementManager>();
@@ -18,12 +21,23 @@ public class ControlManager : MonoBehaviour
 
   private void OnMove(InputValue value)
   {
+
     if (value.Get() == null) 
     {
-      movementManager.direction = 0;
+      timeSinceLastMove = 0;
+      movementManager.directionPlayer = Vector2.zero;
+      movementManager.TryStop();
       return;
     }
-    movementManager.direction = Mathf.Sign(((Vector2) value.Get()).x);
+
+    Vector2 direction = ((Vector2) value.Get()).normalized;
+    if (timeSinceLastMove < 0.05)
+    {
+      return;
+    }
+    
+    movementManager.TryChangeDirection(direction);
+    timeSinceLastMove = 0;
   }
 
   private void OnJump()
@@ -48,7 +62,7 @@ public class ControlManager : MonoBehaviour
 
     if (buttonPress > 0.8)
     {
-      movementManager.running = false;
+      movementManager.running = true;
     }
 
     else if (buttonPress < 0.4)
@@ -57,4 +71,10 @@ public class ControlManager : MonoBehaviour
     }
 
   }
+
+private float timeSinceLastMove = 0;
+ private void Update()
+ {
+  timeSinceLastMove += Time.deltaTime;
+ }
 }

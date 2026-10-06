@@ -226,10 +226,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouvementManager
   raycastManager: {fileID: 2127260406874328676}
-  s_max: 5
-  direction: 0
-  speed: {x: 0, y: 0}
+  running: 0
   jump_force: {x: 0, y: 1024}
+  walljump_force: {x: 512, y: 0}
+  coyoteTime: 0.1
+  inputBufferTime: 0.1
+  directionEffective: {x: 0, y: 0}
+  directionPlayer: {x: 0, y: 0}
+  sensitivityJoyStick: 0.8
 --- !u!114 &2047099259335596381
 MonoBehaviour:
   m_ObjectHideFlags: 0
