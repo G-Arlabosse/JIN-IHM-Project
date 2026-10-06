@@ -7,19 +7,21 @@ public class MovementManager : MonoBehaviour
     private Rigidbody2D rigidBody;
     [SerializeField] private RaycastManager raycastManager;
 
-    private float walkSpeed = 4;
+
+    [Header("Parameters")]
+    [SerializeField] private float walkSpeed = 8;
+    [SerializeField] private float runSpeed = 12;
+    [SerializeField] private float currentSpeed = 8;
+    [SerializeField] private float lerpFactor = 12;
+    [SerializeField] public float jump_force = 1024;
+    [SerializeField] private float walljump_force = 512;
+    [SerializeField] private float coyoteTime = 0.1f; // Time after leaving the ground during which a jump is still allowed
+    [SerializeField] private float inputBufferTime = 0.1f; // Time before landing during which a jump input is still allowed
+    [Space(25)]
+
     public bool running = false;
-    private float runSpeed = 6;
-    private float currentSpeed = 4;
-
-
-    public Vector2 jump_force = new Vector2(0, 1024);
-    public Vector2 walljump_force = new Vector2(512, 0);
-
-    public float coyoteTime = 0.1f; // Time after leaving the ground during which a jump is still allowed
-    public float inputBufferTime = 0.1f; // Time before landing during which a jump input is still allowed
-    private float coyoteTimeCounter;
-    private float inputBufferCounter;
+    private float coyoteTimeCounter = 0;
+    private float inputBufferCounter = 0;
 
     public Vector2 directionEffective = Vector2.zero;
     public Vector2 directionPlayer = Vector2.zero;
@@ -63,7 +65,7 @@ public class MovementManager : MonoBehaviour
             coyoteTimeCounter -= Time.deltaTime;
         }
 
-        timeSinceDirectionChange += 5*Time.deltaTime;
+        timeSinceDirectionChange += lerpFactor*Time.deltaTime;
 
         if (running)
             rigidBody.linearVelocityX = Mathf.Lerp(previousDirection.x, directionEffective.x * runSpeed, timeSinceDirectionChange);
@@ -79,22 +81,24 @@ public class MovementManager : MonoBehaviour
     private void Jump()
     {
         rigidBody.linearVelocityY = 0;
-        rigidBody.AddForce(jump_force);
+        rigidBody.AddForceY(jump_force);
     }
 
     public void TryJump()
     {
         if (!raycastManager.CastDown())
             inputBufferCounter = inputBufferTime;
-
+        
         bool hitLeft = raycastManager.CastLeft();
         bool hitRight = raycastManager.CastRight();
-        if (coyoteTimeCounter > 0 && rigidBody.linearVelocityY <= 0)
-            Jump();
-        else if (hitLeft)
+        
+        if (hitLeft)
             WallJump(1f);
         else if (hitRight)
             WallJump(-1f);
+        else if (coyoteTimeCounter > 0 && rigidBody.linearVelocityY <= 0)
+            {Jump();
+            print("castDown"); }
 
     }
 
@@ -102,7 +106,7 @@ public class MovementManager : MonoBehaviour
     {
         // Set the velocity to zero before applying the wall jump force
         rigidBody.linearVelocityY = 0;
-        rigidBody.AddForce(jump_force + walljump_force * direction);
+        rigidBody.AddForce(new Vector2(walljump_force, jump_force) * direction);
 
         if (raycastManager.CastLeft())
             ChangeDirectionX(1);
@@ -167,7 +171,6 @@ public class MovementManager : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        print("CollisionEnter");
         if (raycastManager.CastLeft() || raycastManager.CastRight())
             ChangeDirection(Vector2.zero);
     }
