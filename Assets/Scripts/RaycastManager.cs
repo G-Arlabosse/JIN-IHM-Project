@@ -41,7 +41,7 @@ public class RaycastManager : MonoBehaviour
     public bool CastDown()
     {
         UpdateOrigins();
-        RaycastHit2D hit = Physics2D.BoxCast(bottomCastOrigin, new Vector2(colliderWidth*0.95f, 0.1f), 0, Vector2.down, 0.1f, walls);
+        RaycastHit2D hit = Physics2D.BoxCast(bottomCastOrigin, new Vector2(colliderWidth*0.8f, 0.1f), 0, Vector2.down, 0.1f, walls);
         return hit.collider != null;
     }
 }

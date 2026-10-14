@@ -132,7 +132,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.004501581, y: 0.00000011920929}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -142,7 +142,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.9189725, y: 0.8739567}
   m_EdgeRadius: 0
 --- !u!50 &4136139555524607848
 Rigidbody2D:
@@ -226,11 +226,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouvementManager
   raycastManager: {fileID: 2127260406874328676}
-  running: 0
-  jump_force: {x: 0, y: 1024}
-  walljump_force: {x: 512, y: 0}
+  walkSpeed: 8
+  runSpeed: 12
+  currentSpeed: 8
+  lerpFactor: 12
+  jump_force: 1024
+  walljump_force: 512
   coyoteTime: 0.1
   inputBufferTime: 0.1
+  running: 0
   directionEffective: {x: 0, y: 0}
   directionPlayer: {x: 0, y: 0}
   sensitivityJoyStick: 0.8
@@ -246,6 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efd01c2200720654ab20010a96fd2423, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DodgeManager
+  dashForce: 512
 --- !u!114 &2127260406874328676
 MonoBehaviour:
   m_ObjectHideFlags: 0

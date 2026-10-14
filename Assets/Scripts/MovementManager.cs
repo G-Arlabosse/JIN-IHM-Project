@@ -12,22 +12,27 @@ public class MovementManager : MonoBehaviour
     [SerializeField] private float walkSpeed = 8;
     [SerializeField] private float runSpeed = 12;
     [SerializeField] private float currentSpeed = 8;
-    [SerializeField] private float lerpFactor = 12;
+    [SerializeField] private float lerpFactor = 8;
     [SerializeField] public float jump_force = 1024;
     [SerializeField] private float walljump_force = 512;
     [SerializeField] private float coyoteTime = 0.1f; // Time after leaving the ground during which a jump is still allowed
     [SerializeField] private float inputBufferTime = 0.1f; // Time before landing during which a jump input is still allowed
     [Space(25)]
 
+    [HideInInspector]
     public bool running = false;
     private float coyoteTimeCounter = 0;
     private float inputBufferCounter = 0;
 
+    [HideInInspector]
     public Vector2 directionEffective = Vector2.zero;
+    [HideInInspector]
     public Vector2 directionPlayer = Vector2.zero;
 
     private Vector2 previousDirection = Vector2.zero;
     private float timeSinceDirectionChange = 0f;
+    private float timeFromWallJump = 0f;
+    private float timeMaxFromWallJump = 0.4f;
 
 
     private void Start()
@@ -38,7 +43,7 @@ public class MovementManager : MonoBehaviour
         inputBufferCounter = 0;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         inputBufferCounter -= Time.deltaTime;
 
@@ -67,10 +72,18 @@ public class MovementManager : MonoBehaviour
 
         timeSinceDirectionChange += lerpFactor*Time.deltaTime;
 
-        if (running)
-            rigidBody.linearVelocityX = Mathf.Lerp(previousDirection.x, directionEffective.x * runSpeed, timeSinceDirectionChange);
-        else
-            rigidBody.linearVelocityX = Mathf.Lerp(previousDirection.x, directionEffective.x * walkSpeed, timeSinceDirectionChange);
+
+        rigidBody.linearVelocityX = Mathf.Lerp(previousDirection.x, directionEffective.x * currentSpeed, timeSinceDirectionChange);
+    
+        if (timeFromWallJump > 0)
+        {
+            timeFromWallJump -= Time.deltaTime;
+            timeFromWallJump = Mathf.Max(timeFromWallJump, 0);
+
+            if (timeFromWallJump == 0)
+                directionEffective.x = directionPlayer.x;
+        }
+            
     }
 
     public void ApplyForce(Vector2 force)
@@ -97,8 +110,8 @@ public class MovementManager : MonoBehaviour
         else if (hitRight)
             WallJump(-1f);
         else if (coyoteTimeCounter > 0 && rigidBody.linearVelocityY <= 0)
-            {Jump();
-            print("castDown"); }
+            Jump();
+
 
     }
 
@@ -112,6 +125,8 @@ public class MovementManager : MonoBehaviour
             ChangeDirectionX(1);
         else
             ChangeDirectionX(-1);
+
+        timeFromWallJump = timeMaxFromWallJump;
     }
 
     public void StopX()
@@ -141,6 +156,9 @@ public class MovementManager : MonoBehaviour
     }
     private void ChangeDirection(Vector2 direction)
     {
+        if (direction != Vector2.zero && timeFromWallJump > 0)
+            return;
+
         directionEffective = direction;
         previousDirection = rigidBody.linearVelocity;
         timeSinceDirectionChange = 0f;
@@ -171,6 +189,7 @@ public class MovementManager : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        timeFromWallJump = 0;
         if (raycastManager.CastLeft() || raycastManager.CastRight())
             ChangeDirection(Vector2.zero);
     }
