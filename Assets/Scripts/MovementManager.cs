@@ -1,6 +1,7 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MovementManager : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class MovementManager : MonoBehaviour
     [SerializeField] private float walljump_force = 512;
     [SerializeField] private float coyoteTime = 0.1f; // Time after leaving the ground during which a jump is still allowed
     [SerializeField] private float inputBufferTime = 0.1f; // Time before landing during which a jump input is still allowed
+    private float accelerationPourcentage = 1;
     [Space(25)]
 
     [HideInInspector]
@@ -32,7 +34,7 @@ public class MovementManager : MonoBehaviour
     private Vector2 previousDirection = Vector2.zero;
     private float timeSinceDirectionChange = 0f;
     private float timeFromWallJump = 0f;
-    private float timeMaxFromWallJump = 0.4f;
+    private float timeMaxFromWallJump = 0.2f;
 
 
     private void Start()
@@ -47,16 +49,23 @@ public class MovementManager : MonoBehaviour
     {
         inputBufferCounter -= Time.deltaTime;
 
+        bool somethingDown = raycastManager.CastDown();
+        bool somethingLeft = raycastManager.CastLeft();
+        bool somethingRight = raycastManager.CastRight();
+        
+        if (somethingDown || (directionPlayer.x > 0 && !somethingRight) || (directionPlayer.x < 0 && !somethingLeft))
+            directionEffective.x = directionPlayer.x;
+
+
         // Update coyote time counter
-        if (raycastManager.CastDown())
+        if (somethingDown)
         {
+            accelerationPourcentage = 1;
 
             if (currentSpeed != runSpeed && running)
             {
                 currentSpeed = runSpeed;
             }
-
-            directionEffective.x = directionPlayer.x;
 
             coyoteTimeCounter = coyoteTime;
             if (inputBufferCounter > 0 && rigidBody.linearVelocityY <= 0)
@@ -67,23 +76,20 @@ public class MovementManager : MonoBehaviour
         }
         else
         {
-            coyoteTimeCounter -= Time.deltaTime;
+            coyoteTimeCounter -= Time.fixedDeltaTime;
         }
 
-        timeSinceDirectionChange += lerpFactor*Time.deltaTime;
+        timeSinceDirectionChange += lerpFactor*Time.fixedDeltaTime;
 
 
-        rigidBody.linearVelocityX = Mathf.Lerp(previousDirection.x, directionEffective.x * currentSpeed, timeSinceDirectionChange);
-    
-        if (timeFromWallJump > 0)
-        {
-            timeFromWallJump -= Time.deltaTime;
-            timeFromWallJump = Mathf.Max(timeFromWallJump, 0);
-
-            if (timeFromWallJump == 0)
-                directionEffective.x = directionPlayer.x;
-        }
+        rigidBody.linearVelocityX = Mathf.Lerp(previousDirection.x, directionEffective.x * currentSpeed, timeSinceDirectionChange * accelerationPourcentage);
             
+
+        if (accelerationPourcentage < 1.0f)
+        {
+            accelerationPourcentage += Time.fixedDeltaTime;
+            accelerationPourcentage = Mathf.Min(accelerationPourcentage, 1.0f);
+        }
     }
 
     public void ApplyForce(Vector2 force)
@@ -119,7 +125,9 @@ public class MovementManager : MonoBehaviour
     {
         // Set the velocity to zero before applying the wall jump force
         rigidBody.linearVelocityY = 0;
-        rigidBody.AddForce(new Vector2(walljump_force* direction, jump_force));
+        rigidBody.AddForce(new Vector2(0, jump_force));
+        rigidBody.linearVelocityX = direction * currentSpeed;
+        accelerationPourcentage = 0.01f;
 
         if (raycastManager.CastLeft())
             ChangeDirectionX(1);
@@ -156,7 +164,7 @@ public class MovementManager : MonoBehaviour
     }
     private void ChangeDirection(Vector2 direction)
     {
-        if (direction != Vector2.zero && timeFromWallJump > 0)
+        if (direction != Vector2.zero && rigidBody.linearVelocityY < 0)
             return;
 
         directionEffective = direction;
@@ -169,7 +177,7 @@ public class MovementManager : MonoBehaviour
     }
 
 
-    [SerializeField] private float sensitivityJoyStick = 0.4f;
+    [SerializeField] private float sensitivityJoyStick = 0.8f;
     public void TryChangeDirection(Vector2 direction)
     {
         if (Mathf.Abs(direction.x) > sensitivityJoyStick)

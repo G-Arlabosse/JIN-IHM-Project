@@ -67,5 +67,8 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "JIN-IHM-Project.slnx"
+    "dotnet.defaultSolution": "JIN-IHM-Project.slnx",
+    "cSpell.words": [
+        "Pourcentage"
+    ]
 }
