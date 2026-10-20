@@ -177,13 +177,12 @@ public class MovementManager : MonoBehaviour
     }
 
 
-    [SerializeField] private float sensitivityJoyStick = 0.8f;
+    [SerializeField] private float sensitivityJoyStick = 0.6f;
     public void TryChangeDirection(Vector2 direction)
     {
+        directionPlayer.x = Mathf.Sign(direction.x);
         if (Mathf.Abs(direction.x) > sensitivityJoyStick)
         { 
-            directionPlayer.x = Mathf.Sign(direction.x); 
-
             if (!raycastManager.CastLeft() && !raycastManager.CastRight())
                 ChangeDirectionX(Mathf.Sign(direction.x)); 
         }

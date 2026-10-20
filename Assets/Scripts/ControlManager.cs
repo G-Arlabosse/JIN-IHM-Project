@@ -30,9 +30,7 @@ public class ControlManager : MonoBehaviour
             return;
         }
 
-        Vector2 moveDir = (Vector2)value.Get();
-        Debug.Log("MoveDir: " + moveDir);
-        Vector2 direction = Mathf.Abs(moveDir.x) > 0.6f ? moveDir.normalized : Vector2.zero;
+        Vector2 direction = ((Vector2)value.Get()).normalized;
 
         movementManager.TryChangeDirection(direction);
         timeSinceLastMove = 0;

@@ -19,9 +19,11 @@ public class DodgeManager : MonoBehaviour
 
         if (movementManager.running && direction != Vector2.zero)
             Dash(direction);
-        else 
-           movementManager.Stop();
-        StartCoroutine(DodgeAnimation());
+        else
+        {
+            movementManager.Stop();
+            StartCoroutine(DodgeAnimation());
+        } 
     }
 
     private IEnumerator DodgeAnimation()
