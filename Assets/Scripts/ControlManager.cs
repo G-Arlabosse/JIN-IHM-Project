@@ -19,17 +19,8 @@ public class ControlManager : MonoBehaviour
     dodgeManager = GetComponent<DodgeManager>();
   }
 
-  private void OnMove(InputValue value)
-  {
-
-    if (value.Get() == null) 
+    private void OnMove(InputValue value)
     {
-<<<<<<< Updated upstream
-      timeSinceLastMove = 0;
-      movementManager.directionPlayer = Vector2.zero;
-      movementManager.TryStop();
-      return;
-=======
 
         if (value.Get() == null) 
         {
@@ -39,19 +30,11 @@ public class ControlManager : MonoBehaviour
             return;
         }
 
-        Vector2 moveDir = (Vector2)value.Get();
-        Vector2 direction = Mathf.Abs(moveDir.x) > 0.6f ? moveDir.normalized : Vector2.zero;
+        Vector2 direction = ((Vector2)value.Get()).normalized;
 
         movementManager.TryChangeDirection(direction);
         timeSinceLastMove = 0;
->>>>>>> Stashed changes
     }
-
-    Vector2 direction = ((Vector2) value.Get()).normalized;
-    
-    movementManager.TryChangeDirection(direction);
-    timeSinceLastMove = 0;
-  }
 
   private void OnJump()
   {
