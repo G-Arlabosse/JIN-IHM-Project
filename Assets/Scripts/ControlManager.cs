@@ -24,10 +24,27 @@ public class ControlManager : MonoBehaviour
 
     if (value.Get() == null) 
     {
+<<<<<<< Updated upstream
       timeSinceLastMove = 0;
       movementManager.directionPlayer = Vector2.zero;
       movementManager.TryStop();
       return;
+=======
+
+        if (value.Get() == null) 
+        {
+            timeSinceLastMove = 0;
+            movementManager.directionPlayer = Vector2.zero;
+            movementManager.TryStop();
+            return;
+        }
+
+        Vector2 moveDir = (Vector2)value.Get();
+        Vector2 direction = Mathf.Abs(moveDir.x) > 0.6f ? moveDir.normalized : Vector2.zero;
+
+        movementManager.TryChangeDirection(direction);
+        timeSinceLastMove = 0;
+>>>>>>> Stashed changes
     }
 
     Vector2 direction = ((Vector2) value.Get()).normalized;
