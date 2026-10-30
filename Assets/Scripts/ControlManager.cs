@@ -8,16 +8,16 @@ using UnityEngine.Timeline;
 
 public class ControlManager : MonoBehaviour
 {
-  private MovementManager movementManager;
-  private DodgeManager dodgeManager;
+    private MovementManager movementManager;
+    private DodgeManager dodgeManager;
 
-  
+    private float timeSinceLastMove = 0.0f;
 
-  private void Start()
-  {
-    movementManager = GetComponent<MovementManager>();
-    dodgeManager = GetComponent<DodgeManager>();
-  }
+    private void Start()
+    {
+      movementManager = GetComponent<MovementManager>();
+      dodgeManager = GetComponent<DodgeManager>();
+    }
 
     private void OnMove(InputValue value)
     {
@@ -36,15 +36,20 @@ public class ControlManager : MonoBehaviour
         timeSinceLastMove = 0;
     }
 
-  private void OnJump()
-  {
-    movementManager.TryJump();
-  }
+    private void OnJump()
+    {
+        movementManager.TryJump();
+    }
 
-  private void OnDodge()
-  {
-    dodgeManager.Dodge();
-  }
+    private void OnDodge()
+    {
+      Vector2 direction = movementManager.directionPlayer;  
+
+      if (movementManager.running && direction != Vector2.zero)
+          dodgeManager.Dash(direction);
+      else
+          dodgeManager.Dodge(direction);
+    } 
 
   private void OnSprint(InputValue value)
   {    
@@ -53,22 +58,9 @@ public class ControlManager : MonoBehaviour
       movementManager.setSprint(false);
       return;
     }
-
-    float buttonPress = (float) value.Get();
-
-    if (buttonPress > 0.8)
-    {
-      movementManager.setSprint(true);
-    }
-
-    else if (buttonPress < 0.4)
-    {
-      movementManager.setSprint(false);
-    }
-
+    movementManager.setSprint(true);
   }
 
-private float timeSinceLastMove = 0;
  private void Update()
  {
   timeSinceLastMove += Time.deltaTime;

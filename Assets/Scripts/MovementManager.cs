@@ -1,12 +1,15 @@
 using System;
+using System.Collections;
+using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MovementManager : MonoBehaviour
 {
-    private Rigidbody2D rigidBody;
+    [SerializeField] private Rigidbody2D rigidBody;
     [SerializeField] private RaycastManager raycastManager;
+    [SerializeField] private DodgeManager dodgeManager;
 
 
     [Header("Parameters")]
@@ -40,8 +43,22 @@ public class MovementManager : MonoBehaviour
 
     private void Start()
     {
-        rigidBody = GetComponent<Rigidbody2D>();
-        //rigidBody.linearDamping = 0.2f;
+        if (rigidBody == null)
+        {
+            rigidBody = GetComponent<Rigidbody2D>();
+            Assert.IsNotNull(rigidBody);
+        }
+        if (raycastManager == null)
+        {
+            raycastManager = GetComponent<RaycastManager>();
+            Assert.IsNotNull(raycastManager);
+        }
+        if (dodgeManager == null)
+        {
+            dodgeManager = GetComponent<DodgeManager>();
+            Assert.IsNotNull(dodgeManager);
+        }
+
         coyoteTimeCounter = 0;
         inputBufferCounter = 0;
     }
@@ -203,8 +220,22 @@ public class MovementManager : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (raycastManager.CastDown())
+            dodgeManager.nmb_dashAndDodge = 1;
+
         if (raycastManager.CastLeft() || raycastManager.CastRight())
             ChangeDirection(Vector2.zero);
+    }
+
+
+
+    public IEnumerator Freeze(float duration)
+    {
+        rigidBody.bodyType = RigidbodyType2D.Static;
+
+        yield return new WaitForSeconds(duration);
+
+        rigidBody.bodyType = RigidbodyType2D.Dynamic;
     }
 
 }

@@ -27,14 +27,14 @@ public class RaycastManager : MonoBehaviour
     public bool CastLeft()
     {
         UpdateOrigins();
-        RaycastHit2D hit = Physics2D.BoxCast(leftCastOrigin, new Vector2(0.1f, colliderHeight * 0.5f), 0, Vector2.down, 0.1f, walls);
+        RaycastHit2D hit = Physics2D.BoxCast(leftCastOrigin, new Vector2(0.1f, colliderHeight * 0.75f), 0, Vector2.down, 0.1f, walls);
         return hit.collider != null;
     }
 
     public bool CastRight()
     {
         UpdateOrigins();
-        RaycastHit2D hit = Physics2D.BoxCast(rightCastOrigin, new Vector2(0.1f, colliderHeight*0.5f), 0, Vector2.down, 0.1f, walls);
+        RaycastHit2D hit = Physics2D.BoxCast(rightCastOrigin, new Vector2(0.1f, colliderHeight*0.75f), 0, Vector2.down, 0.1f, walls);
         return hit.collider != null;
     }
 
