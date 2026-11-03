@@ -241,6 +241,10 @@ MonoBehaviour:
   directionPlayer: {x: 0, y: 0}
   accelerationPourcentage: 1
   currentSpeed: 8
+  afterImage1Prefab: {fileID: 8116967556819694475, guid: 3443e5e9d5f42b74ab80bab070a9d82f, type: 3}
+  afterImage2Prefab: {fileID: 8116967556819694475, guid: 4e1a3165b4f90734f9ba1afb8fd931a7, type: 3}
+  afterImageDelay1: 0
+  afterImageDelay2: 0
   sensitivityJoyStick: 0.6
 --- !u!114 &2047099259335596381
 MonoBehaviour:

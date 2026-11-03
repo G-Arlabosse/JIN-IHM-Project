@@ -42,8 +42,10 @@ public class MovementManager : MonoBehaviour
 
     private bool isDead = false;
 
-    [SerializeField] private GameObject afterImage1;
-    [SerializeField] private GameObject afterImage2;
+    [SerializeField] private GameObject afterImage1Prefab;
+    [SerializeField] private GameObject afterImage2Prefab;
+    private GameObject afterImage1;
+    private GameObject afterImage2;
     [SerializeField] private float afterImageDelay1;
     [SerializeField] private float afterImageDelay2;
 
@@ -64,6 +66,9 @@ public class MovementManager : MonoBehaviour
             dodgeManager = GetComponent<DodgeManager>();
             Assert.IsNotNull(dodgeManager);
         }
+
+        afterImage1 = Instantiate(afterImage1Prefab, transform.position, Quaternion.identity);
+        afterImage2 = Instantiate(afterImage2Prefab, transform.position, Quaternion.identity);
 
         coyoteTimeCounter = 0;
         inputBufferCounter = 0;
