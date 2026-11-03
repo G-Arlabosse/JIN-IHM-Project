@@ -36,6 +36,7 @@ public class MovementManager : MonoBehaviour
     private float timeFromWallJump = 0f;
     private float timeMaxFromWallJump = 0.2f;
 
+    private bool isDead = false;
 
     private void Start()
     {
@@ -47,6 +48,10 @@ public class MovementManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isDead)
+            return;
+
+
         inputBufferCounter -= Time.deltaTime;
 
         bool somethingDown = raycastManager.CastDown();
@@ -199,6 +204,20 @@ public class MovementManager : MonoBehaviour
         timeFromWallJump = 0;
         if (raycastManager.CastLeft() || raycastManager.CastRight())
             ChangeDirection(Vector2.zero);
+    }
+
+    public void Die()
+    {
+        rigidBody.linearVelocity = Vector2.zero;
+        directionEffective = Vector2.zero;
+        directionPlayer = Vector2.zero;
+        isDead = true;
+    }
+
+    public void Respawn(Vector2 respawnPos)
+    {
+        isDead = false;
+        transform.position = respawnPos;
     }
 
 }
