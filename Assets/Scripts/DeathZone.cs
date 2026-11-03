@@ -14,6 +14,7 @@ public class DeathZone : MonoBehaviour
             MovementManager player = collision.gameObject.GetComponent<MovementManager>();
             if (player != null)
             {
+                player.dead();
                 StartCoroutine(Respawn(player));
             }
         }
