@@ -244,6 +244,7 @@ public class MovementManager : MonoBehaviour
     {
         isDead = false;
         transform.position = respawnPos;
+    }
 
 
     public IEnumerator Freeze(float duration)
