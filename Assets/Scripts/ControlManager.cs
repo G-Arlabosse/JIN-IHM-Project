@@ -19,6 +19,7 @@ public class ControlManager : MonoBehaviour
       dodgeManager = GetComponent<DodgeManager>();
     }
 
+    [SerializeField] private float sensitivityJoyStick = 0.6f;
     private void OnMove(InputValue value)
     {
 
@@ -30,7 +31,16 @@ public class ControlManager : MonoBehaviour
             return;
         }
 
-        Vector2 direction = ((Vector2)value.Get()).normalized;
+        Vector2 direction = (Vector2)value.Get();
+        if (Mathf.Abs(direction.x) > sensitivityJoyStick) 
+            direction.x = Mathf.Sign(direction.x);
+        else
+            direction.x = 0;
+
+        if (Mathf.Abs(direction.y) > sensitivityJoyStick) 
+            direction.y = Mathf.Sign(direction.y);
+        else
+            direction.y = 0;
 
         movementManager.TryChangeDirection(direction);
         timeSinceLastMove = 0;
