@@ -1472,12 +1472,28 @@ PrefabInstance:
       value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 3836425383255096028, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
+      propertyPath: afterImage1
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836425383255096028, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
+      propertyPath: afterImage2
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836425383255096028, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
       propertyPath: walkForce.x
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3836425383255096028, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
       propertyPath: inputBufferTime
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836425383255096028, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
+      propertyPath: afterImageDelay1
+      value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836425383255096028, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
+      propertyPath: afterImageDelay2
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 5738790725547320507, guid: 5f8e03a66aba5aa44a7d64e81ee69f4a, type: 3}
       propertyPath: m_LocalPosition.x

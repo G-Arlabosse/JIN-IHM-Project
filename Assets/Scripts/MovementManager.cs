@@ -43,6 +43,13 @@ public class MovementManager : MonoBehaviour
 
     private bool isDead = false;
 
+    [SerializeField] private GameObject afterImage1Prefab;
+    [SerializeField] private GameObject afterImage2Prefab;
+    private GameObject afterImage1;
+    private GameObject afterImage2;
+    [SerializeField] private float afterImageDelay1;
+    [SerializeField] private float afterImageDelay2;
+
     private void Start()
     {
         if (rigidBody == null)
@@ -65,6 +72,9 @@ public class MovementManager : MonoBehaviour
             soundManager = GetComponent<SoundManager>();
             Assert.IsNotNull(soundManager);
         }
+
+        afterImage1 = Instantiate(afterImage1Prefab, transform.position, Quaternion.identity);
+        afterImage2 = Instantiate(afterImage2Prefab, transform.position, Quaternion.identity);
 
         coyoteTimeCounter = 0;
         inputBufferCounter = 0;
@@ -119,6 +129,28 @@ public class MovementManager : MonoBehaviour
             accelerationPourcentage += Time.fixedDeltaTime;
             accelerationPourcentage = Mathf.Min(accelerationPourcentage, 1.0f);
         }
+
+    }
+
+    private void Update()
+    {
+        if (running)
+        {
+            StartCoroutine(MoveAfterImage(afterImage1, transform.position, afterImageDelay1));
+            StartCoroutine(MoveAfterImage(afterImage2, transform.position, afterImageDelay2));
+        }
+        else
+        {
+            afterImage1.SetActive(false);
+            afterImage2.SetActive(false);
+        }
+    }
+
+    private IEnumerator MoveAfterImage(GameObject ai, Vector2 pos, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ai.SetActive(true);
+        ai.transform.position = pos;
     }
 
     public void ApplyForce(Vector2 force)
@@ -241,12 +273,27 @@ public class MovementManager : MonoBehaviour
             ChangeDirection(Vector2.zero);
     }
 
-    public void Die()
+    public void Die(float deathTimer)
     {
         rigidBody.linearVelocity = Vector2.zero;
         directionEffective = Vector2.zero;
         directionPlayer = Vector2.zero;
         isDead = true;
+        StartCoroutine(DeathAnimation(deathTimer));
+    }
+
+    private IEnumerator DeathAnimation(float deathTimer)
+    {
+        SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            Color color = spriteRenderer.color;
+            spriteRenderer.color = Color.red;
+
+            yield return new WaitForSeconds(deathTimer);
+
+            spriteRenderer.color = color;
+        }
     }
 
     public void Respawn(Vector2 respawnPos)
