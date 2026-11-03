@@ -10,6 +10,7 @@ public class MovementManager : MonoBehaviour
     [SerializeField] private Rigidbody2D rigidBody;
     [SerializeField] private RaycastManager raycastManager;
     [SerializeField] private DodgeManager dodgeManager;
+    [SerializeField] private SoundManager soundManager;
 
 
     [Header("Parameters")]
@@ -58,6 +59,11 @@ public class MovementManager : MonoBehaviour
         {
             dodgeManager = GetComponent<DodgeManager>();
             Assert.IsNotNull(dodgeManager);
+        }
+        if (soundManager == null)
+        {
+            soundManager = GetComponent<SoundManager>();
+            Assert.IsNotNull(soundManager);
         }
 
         coyoteTimeCounter = 0;
@@ -122,6 +128,7 @@ public class MovementManager : MonoBehaviour
 
     private void Jump()
     {
+        soundManager.PlayJump();
         rigidBody.linearVelocityY = 0;
         rigidBody.AddForceY(jump_force);
     }
@@ -146,6 +153,7 @@ public class MovementManager : MonoBehaviour
 
     private void WallJump(float direction)
     {
+        soundManager.PlayJump();
         // Set the velocity to zero before applying the wall jump force
         rigidBody.linearVelocityY = 0;
         rigidBody.AddForce(new Vector2(0, jump_force));
@@ -209,9 +217,10 @@ public class MovementManager : MonoBehaviour
     [SerializeField] private float sensitivityJoyStick = 0.6f;
     public void TryChangeDirection(Vector2 direction)
     {
-        directionPlayer.x = Mathf.Sign(direction.x);
+        
         if (Mathf.Abs(direction.x) > sensitivityJoyStick)
         { 
+            directionPlayer.x = Mathf.Sign(direction.x);
             if (!raycastManager.CastLeft() && !raycastManager.CastRight())
                 ChangeDirectionX(Mathf.Sign(direction.x)); 
         }
@@ -256,4 +265,9 @@ public class MovementManager : MonoBehaviour
         rigidBody.bodyType = RigidbodyType2D.Dynamic;
     }
 
+
+    public void dead()
+    {
+        soundManager.PlayDeath();
+    }
 }
