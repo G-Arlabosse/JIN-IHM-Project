@@ -5,18 +5,7 @@ public class DeathZone : MonoBehaviour
 {
 
     [SerializeField] private Vector2 respawnPosition;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private float deathTimer = 0.4f;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -32,8 +21,8 @@ public class DeathZone : MonoBehaviour
 
     private IEnumerator Respawn(MovementManager player)
     {
-        player.Die();
-        yield return new WaitForSeconds(0.4f);
+        player.Die(deathTimer);
+        yield return new WaitForSeconds(deathTimer);
         player.Respawn(respawnPosition);
     }
 }
