@@ -1,24 +1,26 @@
 using System;
+using System.Collections;
+using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MovementManager : MonoBehaviour
 {
-    private Rigidbody2D rigidBody;
+    [SerializeField] private Rigidbody2D rigidBody;
     [SerializeField] private RaycastManager raycastManager;
+    [SerializeField] private DodgeManager dodgeManager;
 
 
     [Header("Parameters")]
     [SerializeField] private float walkSpeed = 8;
     [SerializeField] private float runSpeed = 12;
-    [SerializeField] private float currentSpeed = 8;
     [SerializeField] private float lerpFactor = 8;
     [SerializeField] public float jump_force = 1024;
     [SerializeField] private float walljump_force = 512;
     [SerializeField] private float coyoteTime = 0.1f; // Time after leaving the ground during which a jump is still allowed
     [SerializeField] private float inputBufferTime = 0.1f; // Time before landing during which a jump input is still allowed
-    private float accelerationPourcentage = 1;
+    
     [Space(25)]
 
     [HideInInspector]
@@ -30,18 +32,34 @@ public class MovementManager : MonoBehaviour
     public Vector2 directionEffective = Vector2.zero;
     [HideInInspector]
     public Vector2 directionPlayer = Vector2.zero;
+    [HideInInspector]
+    public float accelerationPourcentage = 1;
+    [HideInInspector]
+    public float currentSpeed = 8;
 
     private Vector2 previousDirection = Vector2.zero;
     private float timeSinceDirectionChange = 0f;
-    private float timeFromWallJump = 0f;
-    private float timeMaxFromWallJump = 0.2f;
 
     private bool isDead = false;
 
     private void Start()
     {
-        rigidBody = GetComponent<Rigidbody2D>();
-        //rigidBody.linearDamping = 0.2f;
+        if (rigidBody == null)
+        {
+            rigidBody = GetComponent<Rigidbody2D>();
+            Assert.IsNotNull(rigidBody);
+        }
+        if (raycastManager == null)
+        {
+            raycastManager = GetComponent<RaycastManager>();
+            Assert.IsNotNull(raycastManager);
+        }
+        if (dodgeManager == null)
+        {
+            dodgeManager = GetComponent<DodgeManager>();
+            Assert.IsNotNull(dodgeManager);
+        }
+
         coyoteTimeCounter = 0;
         inputBufferCounter = 0;
     }
@@ -73,7 +91,7 @@ public class MovementManager : MonoBehaviour
             }
 
             coyoteTimeCounter = coyoteTime;
-            if (inputBufferCounter > 0 && rigidBody.linearVelocityY <= 0)
+            if (inputBufferCounter > 0)
             {
                 TryJump();
                 inputBufferCounter = 0;
@@ -138,8 +156,14 @@ public class MovementManager : MonoBehaviour
             ChangeDirectionX(1);
         else
             ChangeDirectionX(-1);
+    }
 
-        timeFromWallJump = timeMaxFromWallJump;
+    public void InstantChange(Vector2 direction)
+    {
+        rigidBody.linearVelocity = direction;
+        previousDirection.x = Mathf.Sign(direction.x);
+        directionEffective.x = previousDirection.x;
+
     }
 
     public void StopX()
@@ -201,7 +225,9 @@ public class MovementManager : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        timeFromWallJump = 0;
+        if (raycastManager.CastDown())
+            dodgeManager.nmb_dashAndDodge = 1;
+
         if (raycastManager.CastLeft() || raycastManager.CastRight())
             ChangeDirection(Vector2.zero);
     }
@@ -218,6 +244,15 @@ public class MovementManager : MonoBehaviour
     {
         isDead = false;
         transform.position = respawnPos;
+
+
+    public IEnumerator Freeze(float duration)
+    {
+        rigidBody.bodyType = RigidbodyType2D.Static;
+
+        yield return new WaitForSeconds(duration);
+
+        rigidBody.bodyType = RigidbodyType2D.Dynamic;
     }
 
 }
