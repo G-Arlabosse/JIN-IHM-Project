@@ -12,6 +12,11 @@ public class SoundManager : MonoBehaviour
     private AudioSource audioSource;
 
 
+    public void SwitchSound()
+    {
+        audioSource.enabled = !audioSource.enabled;
+    }
+
     public void PlayJump()
     {
         audioSource.PlayOneShot(jumpSound);
