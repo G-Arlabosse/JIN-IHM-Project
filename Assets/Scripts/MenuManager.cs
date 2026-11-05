@@ -1,4 +1,4 @@
-using NUnit.Framework;
+//using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -23,14 +23,14 @@ public class MenuManager : MonoBehaviour
         {
             uIDocument = GetComponent<UIDocument>();
 
-            Assert.IsNotNull(uIDocument);
+            //Assert.IsNotNull(uIDocument);
         }
 
         playButton = uIDocument.rootVisualElement.Q("Play") as Button;
         quitButton = uIDocument.rootVisualElement.Q("Quit") as Button;
 
-        Assert.IsNotNull(playButton);
-        Assert.IsNotNull(quitButton);
+        //Assert.IsNotNull(playButton);
+        //Assert.IsNotNull(quitButton);
 
         playButton.RegisterCallback<ClickEvent>(startGame);
         quitButton.RegisterCallback<ClickEvent>(quitGame);

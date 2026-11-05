@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using NUnit.Framework;
 using UnityEngine;
 
 public class CameraChange : MonoBehaviour
@@ -18,7 +15,7 @@ public class CameraChange : MonoBehaviour
 
     private void Start()
     {
-        Assert.IsNotNull(cam);
+        //Assert.IsNotNull(cam);
         cameraMoving = false;
         timeSinceTransition = 0f;
     }

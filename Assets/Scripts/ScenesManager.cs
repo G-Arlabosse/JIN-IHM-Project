@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class ScenesManager : MonoBehaviour
 {
 
-    const int ID_GAME_SCENE = 0;
+    const int ID_GAME_SCENE = 2;
     const int ID_MENU_SCENE = 1;
 
     public static ScenesManager instance;

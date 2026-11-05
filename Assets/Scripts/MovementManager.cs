@@ -1,9 +1,6 @@
-using System;
 using System.Collections;
-using NUnit.Framework;
-using Unity.VisualScripting;
+//using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class MovementManager : MonoBehaviour
 {
@@ -43,6 +40,9 @@ public class MovementManager : MonoBehaviour
 
     private bool isDead = false;
 
+    [SerializeField] private Color aliveColor = Color.blue;
+    [SerializeField] private Color deadColor = Color.red;
+
     [SerializeField] private GameObject afterImage1Prefab;
     [SerializeField] private GameObject afterImage2Prefab;
     private GameObject afterImage1;
@@ -55,22 +55,22 @@ public class MovementManager : MonoBehaviour
         if (rigidBody == null)
         {
             rigidBody = GetComponent<Rigidbody2D>();
-            Assert.IsNotNull(rigidBody);
+            //Assert.IsNotNull(rigidBody);
         }
         if (raycastManager == null)
         {
             raycastManager = GetComponent<RaycastManager>();
-            Assert.IsNotNull(raycastManager);
+            //Assert.IsNotNull(raycastManager);
         }
         if (dodgeManager == null)
         {
             dodgeManager = GetComponent<DodgeManager>();
-            Assert.IsNotNull(dodgeManager);
+            //Assert.IsNotNull(dodgeManager);
         }
         if (soundManager == null)
         {
             soundManager = GetComponent<SoundManager>();
-            Assert.IsNotNull(soundManager);
+            //Assert.IsNotNull(soundManager);
         }
 
         afterImage1 = Instantiate(afterImage1Prefab, transform.position, Quaternion.identity);
@@ -284,15 +284,17 @@ public class MovementManager : MonoBehaviour
 
     private IEnumerator DeathAnimation(float deathTimer)
     {
-        SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        if (spriteRenderer != null)
+        if (!isDead)
         {
-            Color color = spriteRenderer.color;
-            spriteRenderer.color = Color.red;
+            SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.color = deadColor;
 
-            yield return new WaitForSeconds(deathTimer);
+                yield return new WaitForSeconds(deathTimer);
 
-            spriteRenderer.color = color;
+                spriteRenderer.color = aliveColor;
+            }
         }
     }
 
