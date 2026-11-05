@@ -160,6 +160,8 @@ public class MovementManager : MonoBehaviour
 
     private void Jump()
     {
+        if (isDead)
+            return;
         soundManager.PlayJump();
         rigidBody.linearVelocityY = 0;
         rigidBody.AddForceY(jump_force);
@@ -185,6 +187,8 @@ public class MovementManager : MonoBehaviour
 
     private void WallJump(float direction)
     {
+        if (isDead)
+            return;
         soundManager.PlayJump();
         // Set the velocity to zero before applying the wall jump force
         rigidBody.linearVelocityY = 0;
@@ -275,6 +279,8 @@ public class MovementManager : MonoBehaviour
 
     public void Die(float deathTimer)
     {
+        if (isDead)
+            return;
         rigidBody.linearVelocity = Vector2.zero;
         directionEffective = Vector2.zero;
         directionPlayer = Vector2.zero;
@@ -284,17 +290,14 @@ public class MovementManager : MonoBehaviour
 
     private IEnumerator DeathAnimation(float deathTimer)
     {
-        if (!isDead)
+        SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
         {
-            SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-            if (spriteRenderer != null)
-            {
-                spriteRenderer.color = deadColor;
+            spriteRenderer.color = deadColor;
 
-                yield return new WaitForSeconds(deathTimer);
+            yield return new WaitForSeconds(deathTimer);
 
-                spriteRenderer.color = aliveColor;
-            }
+            spriteRenderer.color = aliveColor;
         }
     }
 
