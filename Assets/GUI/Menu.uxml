@@ -1,0 +1,9 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Main" style="flex-grow: 1;">
+        <ui:VisualElement name="Center" style="flex-grow: 1; justify-content: center; align-self: center; align-items: center;">
+            <ui:Button text="P L A Y" name="Play" style="font-size: 72px; -unity-font-style: bold; top: 10%;"/>
+            <ui:VisualElement name="VisualElement" style="flex-grow: 0.2;"/>
+            <ui:Button text="Q U I T" name="Quit" style="-unity-font-style: bold; font-size: 32px;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
