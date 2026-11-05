@@ -1,10 +1,5 @@
-using System;
-using System.Runtime.Serialization;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Timeline;
 
 public class ControlManager : MonoBehaviour
 {
