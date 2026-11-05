@@ -267,7 +267,7 @@ public class MovementManager : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (raycastManager.CastDown())
-            dodgeManager.nmb_dashAndDodge = 1;
+            dodgeManager.ResetDashAndDodge();
 
         if (raycastManager.CastLeft() || raycastManager.CastRight())
             ChangeDirection(Vector2.zero);
