@@ -17,6 +17,8 @@ public class ControlManager : MonoBehaviour
     [SerializeField] private float sensitivityJoyStick = 0.6f;
     private void OnMove(InputValue value)
     {
+        if (movementManager.isDead)
+            return;
 
         if (value.Get() == null) 
         {
@@ -43,11 +45,17 @@ public class ControlManager : MonoBehaviour
 
     private void OnJump()
     {
+        if (movementManager.isDead)
+            return;
+
         movementManager.TryJump();
     }
 
     private void OnDodge()
     {
+      if (movementManager.isDead)
+            return;
+
       Vector2 direction = movementManager.directionPlayer;  
 
       if (movementManager.running && direction != Vector2.zero)
@@ -57,7 +65,10 @@ public class ControlManager : MonoBehaviour
     } 
 
   private void OnSprint(InputValue value)
-  {    
+  {   
+    if (movementManager.isDead)
+            return;
+
     if (value.Get() == null)
     {
       movementManager.setSprint(false);

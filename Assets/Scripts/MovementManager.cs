@@ -38,7 +38,7 @@ public class MovementManager : MonoBehaviour
     private Vector2 previousDirection = Vector2.zero;
     private float timeSinceDirectionChange = 0f;
 
-    private bool isDead = false;
+    public bool isDead = false;
 
     [SerializeField] private Color aliveColor = Color.blue;
     [SerializeField] private Color deadColor = Color.red;
@@ -169,6 +169,9 @@ public class MovementManager : MonoBehaviour
 
     public void TryJump()
     {
+        if (isDead)
+            return;
+
         if (!raycastManager.CastDown())
             inputBufferCounter = inputBufferTime;
         
@@ -229,6 +232,9 @@ public class MovementManager : MonoBehaviour
 
     public void setSprint(bool value)
     {
+        if (isDead)
+            return;
+
         running = value;
         if (value && raycastManager.CastDown())
             currentSpeed = runSpeed;
@@ -281,6 +287,8 @@ public class MovementManager : MonoBehaviour
     {
         if (isDead)
             return;
+
+        soundManager.PlayDeath();
         rigidBody.linearVelocity = Vector2.zero;
         directionEffective = Vector2.zero;
         directionPlayer = Vector2.zero;
@@ -303,6 +311,9 @@ public class MovementManager : MonoBehaviour
 
     public void Respawn(Vector2 respawnPos)
     {
+        if (!isDead)
+            return ;
+
         isDead = false;
         transform.position = respawnPos;
     }
@@ -318,8 +329,4 @@ public class MovementManager : MonoBehaviour
     }
 
 
-    public void dead()
-    {
-        soundManager.PlayDeath();
-    }
 }
