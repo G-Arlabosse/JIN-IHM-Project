@@ -293,6 +293,7 @@ public class MovementManager : MonoBehaviour
         directionEffective = Vector2.zero;
         directionPlayer = Vector2.zero;
         isDead = true;
+        running = false;
         StartCoroutine(DeathAnimation(deathTimer));
     }
 
@@ -315,6 +316,7 @@ public class MovementManager : MonoBehaviour
             return ;
 
         isDead = false;
+        running = false;
         transform.position = respawnPos;
     }
 
