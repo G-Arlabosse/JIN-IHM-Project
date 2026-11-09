@@ -38,6 +38,7 @@ public class MovementManager : MonoBehaviour
     private Vector2 previousDirection = Vector2.zero;
     private float timeSinceDirectionChange = 0f;
 
+    [HideInInspector]
     public bool isDead = false;
 
     [SerializeField] private Color aliveColor = Color.blue;
@@ -232,7 +233,7 @@ public class MovementManager : MonoBehaviour
 
     public void setSprint(bool value)
     {
-        if (isDead)
+        if (isDead && value)
             return;
 
         running = value;
@@ -293,7 +294,7 @@ public class MovementManager : MonoBehaviour
         directionEffective = Vector2.zero;
         directionPlayer = Vector2.zero;
         isDead = true;
-        running = false;
+        //running = false;
         StartCoroutine(DeathAnimation(deathTimer));
     }
 
@@ -316,7 +317,7 @@ public class MovementManager : MonoBehaviour
             return ;
 
         isDead = false;
-        running = false;
+        //running = false;
         transform.position = respawnPos;
     }
 

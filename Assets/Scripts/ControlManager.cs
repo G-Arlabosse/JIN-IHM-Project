@@ -66,8 +66,8 @@ public class ControlManager : MonoBehaviour
 
   private void OnSprint(InputValue value)
   {   
-    if (movementManager.isDead)
-            return;
+    //if (movementManager.isDead)
+    //        return;
 
     if (value.Get() == null)
     {
